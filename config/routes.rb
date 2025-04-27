@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get "loans/new"
+  get "loans/show"
+  get "loans/confirm"
+  get "loans/accept"
+  get "loans/reject"
+  get "loans/request_readjustment"
+  get "loans/repay"
   devise_for :users
   
   get 'user_dashboard', to: 'users#dashboard'

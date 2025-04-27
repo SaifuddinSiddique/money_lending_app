@@ -1,0 +1,19 @@
+<h1>Admin Dashboard - Loan Requests</h1>
+
+<% @loans.each do |loan| %>
+  <div style="border: 1px solid black; padding: 10px; margin-bottom: 10px;">
+    <p><strong>User:</strong> <%= loan.user.email %></p>
+    <p><strong>Requested Amount:</strong> ₹<%= loan.amount %></p>
+    <p><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
+    <p><strong>Status:</strong> <%= loan.status.humanize %></p>
+
+    <% if loan.requested? %>
+      <%= link_to "Approve without changes", approve_admin_loan_path(loan), method: :post %> |
+      <%= link_to "Reject", reject_admin_loan_path(loan), method: :post, data: { confirm: "Are you sure?" } %> |
+      <%= link_to "Adjust", edit_admin_loan_path(loan) %>
+    <% elsif loan.readjustment_requested? %>
+      <%= link_to "Adjust Again", edit_admin_loan_path(loan) %> |
+      <%= link_to "Reject Readjustment", reject_admin_loan_path(loan), method: :post, data: { confirm: "Reject Readjustment?" } %>
+    <% end %>
+  </div>
+<% end %>

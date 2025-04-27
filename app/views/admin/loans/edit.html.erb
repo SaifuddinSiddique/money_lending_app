@@ -1,0 +1,17 @@
+<h1>Adjust Loan</h1>
+
+<%= form_with(model: [:admin, @loan], local: true, method: :patch) do |form| %>
+  <div>
+    <%= form.label :amount, "Adjusted Loan Amount" %><br>
+    <%= form.number_field :amount, value: @loan.amount %>
+  </div>
+
+  <div>
+    <%= form.label :interest_rate, "Adjusted Interest Rate (%)" %><br>
+    <%= form.number_field :interest_rate, value: @loan.interest_rate %>
+  </div>
+
+  <div>
+    <%= form.submit "Submit Adjustment" %>
+  </div>
+<% end %>

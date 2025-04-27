@@ -1,0 +1,17 @@
+<h1>Request a New Loan</h1>
+
+<%= form_with(model: @loan, local: true) do |form| %>
+  <div>
+    <%= form.label :amount, "Loan Amount" %><br>
+    <%= form.number_field :amount, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :interest_rate, "Interest Rate (%)" %><br>
+    <%= form.number_field :interest_rate, required: true %>
+  </div>
+
+  <div>
+    <%= form.submit "Request Loan" %>
+  </div>
+<% end %>

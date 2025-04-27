@@ -1,0 +1,18 @@
+<h1>User Dashboard</h1>
+
+<p><strong>Wallet Balance:</strong> ₹<%= @wallet_balance %></p>
+
+<h2>Your Loans</h2>
+
+<% if @loans.any? %>
+  <% @loans.each do |loan| %>
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+      <p><strong>Amount:</strong> ₹<%= loan.amount %></p>
+      <p><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
+      <p><strong>Status:</strong> <%= loan.status.humanize %></p>
+      <p><%= link_to "View Details", loan_path(loan) %></p>
+    </div>
+  <% end %>
+<% else %>
+  <p>No loans found. <%= link_to "Request a Loan", new_loan_path %></p>
+<% end %>
