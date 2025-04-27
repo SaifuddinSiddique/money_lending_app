@@ -4,11 +4,13 @@ class Admin::LoansController < ApplicationController
 
   def index
     @loans = Loan.requested.or(Loan.readjustment_requested)
+    @wallet_balance = current_user.wallet_balance
   end
 
   def approve
     @loan = Loan.find(params[:id])
     @loan.approve!
+    @loan.update!(admin_id: current_user.id)
     redirect_to admin_loans_path, notice: "Loan approved"
   end
 
@@ -24,8 +26,12 @@ class Admin::LoansController < ApplicationController
 
   def update
     @loan = Loan.find(params[:id])
-    @loan.update(amount: params[:loan][:amount], interest_rate: params[:loan][:interest_rate])
-    @loan.request_adjustment!
+    @loan.update(amount: params[:loan][:amount], interest_rate: params[:loan][:interest_rate], admin_id: current_user.id)
+    if @loan.readjustment_requested?
+      @loan.adjust_readjustment!
+    else
+      @loan.request_adjustment!
+    end
     redirect_to admin_loans_path, notice: "Loan adjustment sent"
   end
 

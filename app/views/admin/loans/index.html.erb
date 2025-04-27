@@ -1,19 +1,21 @@
 <h1>Admin Dashboard - Loan Requests</h1>
+<p><strong>Wallet Balance:</strong> ₹<%= @wallet_balance %></p>
 
 <% @loans.each do |loan| %>
   <div style="border: 1px solid black; padding: 10px; margin-bottom: 10px;">
     <p><strong>User:</strong> <%= loan.user.email %></p>
     <p><strong>Requested Amount:</strong> ₹<%= loan.amount %></p>
     <p><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
-    <p><strong>Status:</strong> <%= loan.status.humanize %></p>
+    <p><strong>Status:</strong> <%= loan.state.humanize %></p>
 
     <% if loan.requested? %>
-      <%= link_to "Approve without changes", approve_admin_loan_path(loan), method: :post %> |
-      <%= link_to "Reject", reject_admin_loan_path(loan), method: :post, data: { confirm: "Are you sure?" } %> |
-      <%= link_to "Adjust", edit_admin_loan_path(loan) %>
+      <%= button_to "Approve without changes", approve_admin_loan_path(loan), method: :post %> |
+      <%= button_to "Reject", reject_admin_loan_path(loan), method: :post, data: { confirm: "Are you sure?" } %> |
+      <%= link_to "Adjust", edit_admin_loan_path(loan),  data: { turbo: false } %>
     <% elsif loan.readjustment_requested? %>
-      <%= link_to "Adjust Again", edit_admin_loan_path(loan) %> |
-      <%= link_to "Reject Readjustment", reject_admin_loan_path(loan), method: :post, data: { confirm: "Reject Readjustment?" } %>
+      <%= link_to "Adjust Again", edit_admin_loan_path(loan), data: { turbo: false } %> |
+      <%= button_to "Reject Readjustment", reject_admin_loan_path(loan), method: :post, data: { confirm: "Reject Readjustment?" } %>
     <% end %>
   </div>
 <% end %>
+<p><%= button_to "Log Out", destroy_user_session_path, method: :delete %></p>

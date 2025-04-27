@@ -9,10 +9,30 @@
     <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
       <p><strong>Amount:</strong> ₹<%= loan.amount %></p>
       <p><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
-      <p><strong>Status:</strong> <%= loan.status.humanize %></p>
+      <p><strong>Status:</strong> <%= loan.state.humanize %></p>
       <p><%= link_to "View Details", loan_path(loan) %></p>
+
+         <% if loan.state == 'waiting_for_adjustment_acceptance' || loan.state == 'waiting_for_readjustment_acceptance' %>
+            <h3>Admin has adjusted your loan request. Please review the details below:</h3>
+            <p><strong>Adjusted Amount:</strong> ₹<%= loan.amount %></p>
+            <p><strong>Adjusted Interest Rate:</strong> <%= loan.interest_rate %>%</p>
+
+            <%= button_to 'Accept Adjustment', accept_adjustment_loan_path(loan), method: :post %> 
+            | 
+            <%= button_to 'Reject Adjustment', reject_adjustment_loan_path(loan), method: :post, data: { confirm: "Are you sure you want to reject this adjustment?" } %> 
+            | 
+            <%= button_to 'Request Readjustment', request_readjustment_loan_path(loan), method: :post %>
+
+        <% elsif loan.approved? %>
+            <h3>Admin has approved your loan request</h3>
+            <%= button_to 'Confirm Approval', confirm_approval_loan_path(loan), method: :post %> 
+            | 
+            <%= button_to 'Reject Loan', reject_approval_loan_path(loan), method: :post, data: { confirm: "Are you sure you want to reject this loan?" } %>
+        <% end %>
     </div>
   <% end %>
 <% else %>
   <p>No loans found. <%= link_to "Request a Loan", new_loan_path %></p>
 <% end %>
+<p>Create a new loan. <%= link_to "Request a Loan", new_loan_path %></p>
+<p><%= button_to "Log Out", destroy_user_session_path, method: :delete %></p>
