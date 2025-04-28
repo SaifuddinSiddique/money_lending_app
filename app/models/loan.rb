@@ -55,8 +55,34 @@ class Loan < ApplicationRecord
     admin_wallet = admin.wallet_balance - amount
     user_wallet = user.wallet_balance + amount
 
-    admin.update!(wallet_balance: admin_wallet)
-    user.update!(wallet_balance: user_wallet)
+    ActiveRecord::Base.transaction do
+      admin.update!(wallet_balance: admin_wallet)
+      user.update!(wallet_balance: user_wallet)
+    end
+
+    true
+  end
+
+  
+  def process_closed_loan_transaction
+    return unless  state == 'open'
+
+    admin = User.find_by(id: self.admin_id)
+  
+    repayment_amount = [user.wallet_balance, total_amount].min
+
+    if repayment_amount.zero?
+      errors.add(:base, "User has no balance to repay.")
+      return false
+    end
+  
+    user_wallet = user.wallet_balance - repayment_amount
+    admin_wallet = admin.wallet_balance + repayment_amount
+  
+    ActiveRecord::Base.transaction do
+      admin.update!(wallet_balance: admin_wallet)
+      user.update!(wallet_balance: user_wallet)
+    end
 
     true
   end

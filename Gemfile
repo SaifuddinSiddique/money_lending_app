@@ -57,3 +57,4 @@ gem 'sidekiq'
 gem 'simple_form'
 gem 'aasm'
 gem 'sidekiq-cron'
+gem 'whenever', require: false

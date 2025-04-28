@@ -23,8 +23,8 @@ class LoansController < ApplicationController
 
   def accept_adjustment
     if @loan.waiting_for_adjustment_acceptance? || @loan.waiting_for_readjustment_acceptance?
-      @loan.update(state: 'open')
       @loan.process_wallet_transaction
+      @loan.update(state: 'open', total_amount: @loan.amount)
       redirect_to @loan, notice: 'Loan opened successfully after adjustment!'
     else
       redirect_to @loan, alert: 'Invalid loan state for acceptance.'
@@ -51,15 +51,15 @@ class LoansController < ApplicationController
     end
   end
 
-  # # User repays loan
-  # def repay
-  #   if @loan.open?
-  #     @loan.update(state: 'closed')
-  #     redirect_to @loan, notice: 'Loan repaid and closed!'
-  #   else
-  #     redirect_to @loan, alert: 'Loan cannot be repaid right now.'
-  #   end
-  # end
+  # User repays loan
+  def repay
+    if @loan.open?
+      @loan.process_closed_loan_transaction
+      redirect_to @loan, notice: 'Loan repaid and closed!'
+    else
+      redirect_to @loan, alert: 'Loan cannot be repaid right now.'
+    end
+  end
 
   def confirm_approval
     @loan = Loan.find(params[:id])
@@ -67,7 +67,7 @@ class LoansController < ApplicationController
     if @loan.user == current_user && @loan.approved?
       # Update the loan state to 'open' and process wallet transaction
       if @loan.process_wallet_transaction
-        @loan.update(state: :open)  # Update the state of the loan to 'open'
+        @loan.update(state: :open, total_amount: @loan.amount)  # Update the state of the loan to 'open'
         redirect_to user_dashboard_path, notice: "Loan confirmed. It is now open!"
       else
         redirect_to user_dashboard_path, alert: "Admin does not have enough balance to approve the loan."

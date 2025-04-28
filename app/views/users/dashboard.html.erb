@@ -10,6 +10,9 @@
       <p><strong>Amount:</strong> ₹<%= loan.amount %></p>
       <p><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
       <p><strong>Status:</strong> <%= loan.state.humanize %></p>
+      <% if loan.open? %>
+        <p><strong>Total Payable Amount (Principal + Interest):</strong> <%= number_to_currency(loan.total_amount, precision: 2, unit: "₹") %></p>
+      <% end %>
       <p><%= link_to "View Details", loan_path(loan) %></p>
 
          <% if loan.state == 'waiting_for_adjustment_acceptance' || loan.state == 'waiting_for_readjustment_acceptance' %>
