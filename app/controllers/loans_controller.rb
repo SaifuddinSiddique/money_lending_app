@@ -55,6 +55,7 @@ class LoansController < ApplicationController
   def repay
     if @loan.open?
       @loan.process_closed_loan_transaction
+      @loan.update(state: "closed")
       redirect_to @loan, notice: 'Loan repaid and closed!'
     else
       redirect_to @loan, alert: 'Loan cannot be repaid right now.'

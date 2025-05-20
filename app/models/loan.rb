@@ -18,11 +18,11 @@ class Loan < ApplicationRecord
     end
 
     event :reject do
-      transitions from: [:requested, :waiting_for_adjustment_acceptance, :readjustment_requested], to: :rejected
+      transitions from: [ :requested, :waiting_for_adjustment_acceptance, :readjustment_requested ], to: :rejected
     end
 
     event :open_loan do
-      transitions from: [:approved, :waiting_for_adjustment_acceptance], to: :open
+      transitions from: [ :approved, :waiting_for_adjustment_acceptance ], to: :open
     end
 
     event :close do
@@ -43,10 +43,10 @@ class Loan < ApplicationRecord
   end
 
   def process_wallet_transaction
-    return unless approved? || state == 'open'
+    return unless approved? || state == "open"
 
     admin = User.find_by(id: self.admin_id)
-  
+
     if admin.wallet_balance < amount
       errors.add(:base, "Admin does not have enough balance to approve this loan.")
       return false
@@ -63,22 +63,22 @@ class Loan < ApplicationRecord
     true
   end
 
-  
+
   def process_closed_loan_transaction
-    return unless  state == 'open'
+    return unless  state == "open"
 
     admin = User.find_by(id: self.admin_id)
-  
-    repayment_amount = [user.wallet_balance, total_amount].min
+
+    repayment_amount = [ user.wallet_balance, total_amount ].min
 
     if repayment_amount.zero?
       errors.add(:base, "User has no balance to repay.")
       return false
     end
-  
+
     user_wallet = user.wallet_balance - repayment_amount
     admin_wallet = admin.wallet_balance + repayment_amount
-  
+
     ActiveRecord::Base.transaction do
       admin.update!(wallet_balance: admin_wallet)
       user.update!(wallet_balance: user_wallet)

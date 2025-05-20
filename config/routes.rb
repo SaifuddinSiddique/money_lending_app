@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
-  
-  get 'user_dashboard', to: 'users#dashboard'
-  
+
+  get "user_dashboard", to: "users#dashboard"
+
   namespace :admin do
     resources :loans do
       post :approve, on: :member
@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :loans, only: [:new, :create, :show] do
+  resources :loans, only: [ :new, :create, :show ] do
     post :confirm, on: :member
     post :accept_adjustment, on: :member
     post :reject_adjustment, on: :member

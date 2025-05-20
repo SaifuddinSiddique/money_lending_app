@@ -1,41 +1,69 @@
-<h1>User Dashboard</h1>
+<div class="container mt-4">
+  <h1 class="mb-4">User Dashboard</h1>
 
-<p><strong>Wallet Balance:</strong> ₹<%= @wallet_balance %></p>
+  <div class="alert alert-primary" role="alert">
+    <strong>Wallet Balance:</strong> ₹<%= @wallet_balance %>
+  </div>
 
-<h2>Your Loans</h2>
+  <h2 class="mt-5">Your Loans</h2>
 
-<% if @loans.any? %>
-  <% @loans.each do |loan| %>
-    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-      <p><strong>Amount:</strong> ₹<%= loan.amount %></p>
-      <p><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
-      <p><strong>Status:</strong> <%= loan.state.humanize %></p>
-      <% if loan.open? %>
-        <p><strong>Total Payable Amount (Principal + Interest):</strong> <%= number_to_currency(loan.total_amount, precision: 2, unit: "₹") %></p>
+  <% if @loans.any? %>
+    <div class="row">
+      <% @loans.each do |loan| %>
+        <div class="col-md-6">
+          <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+              <p><strong>Amount:</strong> ₹<%= loan.amount %></p>
+              <p><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
+              <p><strong>Status:</strong> <%= loan.state.humanize %></p>
+
+              <% if loan.open? %>
+                <p><strong>Total Payable Amount (Principal + Interest):</strong> 
+                  <%= number_to_currency(loan.total_amount, precision: 2, unit: "₹") %>
+                </p>
+              <% end %>
+
+              <p>
+                <%= link_to "View Details", loan_path(loan), class: "btn btn-outline-primary btn-sm" %>
+              </p>
+
+              <% if loan.state == 'waiting_for_adjustment_acceptance' || loan.state == 'waiting_for_readjustment_acceptance' %>
+                <div class="alert alert-warning">
+                  <h5 class="alert-heading">Adjustment Notice</h5>
+                  <p><strong>Adjusted Amount:</strong> ₹<%= loan.amount %></p>
+                  <p><strong>Adjusted Interest Rate:</strong> <%= loan.interest_rate %>%</p>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <%= link_to 'Accept Adjustment', accept_adjustment_loan_path(loan), data: { turbo_method: :post }, class: "btn btn-success btn-sm" %>
+                  <%= link_to 'Reject Adjustment', reject_adjustment_loan_path(loan), data: { turbo_method: :post, turbo_confirm: "Are you sure you want to reject this adjustment?" }, class: "btn btn-danger btn-sm" %>
+                  <%= link_to 'Request Readjustment', request_readjustment_loan_path(loan), data: { turbo_method: :post }, class: "btn btn-warning btn-sm" %>                
+                </div>
+
+              <% elsif loan.approved? %>
+                <div class="alert alert-success">
+                  <h5 class="alert-heading">Loan Approved</h5>
+                  <p>Your loan has been approved by the admin.</p>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <%= link_to 'Confirm Approval', confirm_approval_loan_path(loan), method: :post, data: { turbo_method: :post }, class: "btn btn-success btn-sm" %>
+                  <%= link_to 'Reject Loan', reject_approval_loan_path(loan), data: { turbo_method: :post, turbo_confirm: "Are you sure you want to reject this loan?" }, class: "btn btn-danger btn-sm" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
       <% end %>
-      <p><%= link_to "View Details", loan_path(loan) %></p>
-
-         <% if loan.state == 'waiting_for_adjustment_acceptance' || loan.state == 'waiting_for_readjustment_acceptance' %>
-            <h3>Admin has adjusted your loan request. Please review the details below:</h3>
-            <p><strong>Adjusted Amount:</strong> ₹<%= loan.amount %></p>
-            <p><strong>Adjusted Interest Rate:</strong> <%= loan.interest_rate %>%</p>
-
-            <%= button_to 'Accept Adjustment', accept_adjustment_loan_path(loan), method: :post %> 
-            | 
-            <%= button_to 'Reject Adjustment', reject_adjustment_loan_path(loan), method: :post, data: { confirm: "Are you sure you want to reject this adjustment?" } %> 
-            | 
-            <%= button_to 'Request Readjustment', request_readjustment_loan_path(loan), method: :post %>
-
-        <% elsif loan.approved? %>
-            <h3>Admin has approved your loan request</h3>
-            <%= button_to 'Confirm Approval', confirm_approval_loan_path(loan), method: :post %> 
-            | 
-            <%= button_to 'Reject Loan', reject_approval_loan_path(loan), method: :post, data: { confirm: "Are you sure you want to reject this loan?" } %>
-        <% end %>
+        <div class="mt-3">
+          <%= link_to "Request a New Loan", new_loan_path, class: "btn btn-outline-secondary btn-sm" %> 
+        </div>
+    </div>
+  <% else %>
+    <div class="alert alert-info mt-4">
+      No loans found. <%= link_to "Request a Loan", new_loan_path, class: "btn btn-primary btn-sm ms-2" %>
     </div>
   <% end %>
-<% else %>
-  <p>No loans found. <%= link_to "Request a Loan", new_loan_path %></p>
-<% end %>
-<p>Create a new loan. <%= link_to "Request a Loan", new_loan_path %></p>
-<p><%= button_to "Log Out", destroy_user_session_path, method: :delete %></p>
+  <br>
+  <div style="display: inline-block;">
+    <%= link_to "Log Out", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure you want Log Out" }, class: "btn btn-outline-danger" %>
+  </div>
+</div>

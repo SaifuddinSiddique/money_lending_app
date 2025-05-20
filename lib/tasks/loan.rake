@@ -5,4 +5,3 @@ namespace :loan do
         CalculateInterestJob.perform_now
     end
 end
-  

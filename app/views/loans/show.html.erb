@@ -1,23 +1,30 @@
-<h1>Loan Details</h1>
+<center>
+  <h1>Loan Details</h1>
 
-<p><strong>Amount:</strong> ₹<%= @loan.amount %></p>
-<p><strong>Interest Rate:</strong> <%= @loan.interest_rate %>%</p>
-<p><strong>Status:</strong> <%= @loan.state.humanize %></p>
+  <p><strong>Amount:</strong> ₹<%= @loan.amount %></p>
+  <p><strong>Interest Rate:</strong> <%= @loan.interest_rate %>%</p>
+  <p><strong>Status:</strong> <%= @loan.state.humanize %></p>
 
-<% if @loan.waiting_for_adjustment_acceptance? %>
-  <%= link_to "Accept Adjustment", accept_adjustment_loan_path(@loan), method: :post %> |
-  <%= link_to "Reject Adjustment", reject_adjustment_loan_path(@loan), method: :post, data: { confirm: "Are you sure you want to reject this?" } %> |
-  <%= link_to "Request Readjustment", request_readjustment_loan_path(@loan), method: :post %>
-<% end %>
+  <% if @loan.waiting_for_adjustment_acceptance? %>
+    <div class="adjustment-actions mb-3 d-flex flex-wrap gap-2">
+      <%= link_to "Accept Adjustment", accept_adjustment_loan_path(@loan), data: { turbo_method: :post }, class: "btn btn-success btn-sm" %>
+      <%= link_to "Reject Adjustment", reject_adjustment_loan_path(@loan), data: { turbo_method: :post, confirm: "Are you sure you want to reject this?" }, class: "btn btn-danger btn-sm" %>
+      <%= link_to "Request Readjustment", request_readjustment_loan_path(@loan), data: { turbo_method: :post }, class: "btn btn-warning btn-sm" %>
+    </div>
+  <% end %>
 
-<% if @loan.approved? %>
-  <%= link_to "Confirm Loan", confirm_approval_loan_path(@loan), method: :post %> |
-  <%= link_to "Reject Loan", reject_approval_loan_path(@loan), method: :post %>
-<% end %>
+  <% if @loan.approved? %>
+    <div class="approval-actions mb-3 d-flex flex-wrap gap-2">
+      <%= link_to "Confirm Loan", confirm_approval_loan_path(@loan), data: { turbo_method: :post }, class: "btn btn-success btn-sm" %>
+      <%= link_to "Reject Loan", reject_approval_loan_path(@loan), data: { turbo_method: :post }, class: "btn btn-danger btn-sm" %>
+    </div>
+  <% end %>
 
-<% if @loan.open? %>
-  <%= button_to "Repay Loan", repay_loan_path(@loan), method: :post %>
-<% end %>
-
-<br><br>
-<%= link_to "Back to Dashboard", user_dashboard_path %>
+  <% if @loan.open? %>
+    <div class="repayment-action mt-3">
+      <%= link_to "Repay Loan", repay_loan_path(@loan), method: :post, data: { turbo_method: :post }, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+  <br>
+  <%= link_to "Back to Dashboard", user_dashboard_path %>
+</center>
