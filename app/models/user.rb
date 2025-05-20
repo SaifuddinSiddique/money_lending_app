@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :loans
+  has_many :wallet_transactions, foreign_key: :wallet_id
+
   after_create :initialize_wallet_balance
 
   enum role: { user: "user", admin: "admin" }

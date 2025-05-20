@@ -54,10 +54,19 @@ class Loan < ApplicationRecord
 
     admin_wallet = admin.wallet_balance - amount
     user_wallet = user.wallet_balance + amount
-
+    debugger
     ActiveRecord::Base.transaction do
       admin.update!(wallet_balance: admin_wallet)
       user.update!(wallet_balance: user_wallet)
+
+      WalletTransaction.create!(
+        wallet: user,
+        transaction_type: :credit,
+        amount: amount,
+        description: "Loan payment for loan ##{self.id}",
+        related_user: admin,
+        loan: self
+      )
     end
 
     true
@@ -78,10 +87,19 @@ class Loan < ApplicationRecord
 
     user_wallet = user.wallet_balance - repayment_amount
     admin_wallet = admin.wallet_balance + repayment_amount
-
+    debugger
     ActiveRecord::Base.transaction do
       admin.update!(wallet_balance: admin_wallet)
       user.update!(wallet_balance: user_wallet)
+
+      WalletTransaction.create!(
+        wallet: user,
+        transaction_type: :debit,
+        amount: amount,
+        description: "Loan repayment for loan ##{self.id}",
+        related_user: admin,
+        loan: self
+      )
     end
 
     true

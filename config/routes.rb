@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   get "user_dashboard", to: "users#dashboard"
+  get 'wallet_transactions/wallet_history', to: 'wallet_transactions#wallet_history'
 
   namespace :admin do
     resources :loans do
