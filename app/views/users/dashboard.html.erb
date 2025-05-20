@@ -3,7 +3,12 @@
 
   <div class="alert alert-primary" role="alert">
     <strong>Wallet Balance:</strong> ₹<%= @wallet_balance %><br>
-    <%= link_to "View Wallet History", wallet_transactions_wallet_history_path %>
+    <%= link_to "View Wallet History", wallet_transactions_wallet_history_path %><br>
+    <% if current_user.kyc_profile.present? %>
+      KYC Status: <%= current_user.kyc_profile.status %>
+    <% else %>
+      <%= link_to "Complete KYC", new_user_kyc_profile_path(current_user) %>
+    <% end %>
   </div>
 
   <h2 class="mt-5">Your Loans</h2>

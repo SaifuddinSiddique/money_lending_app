@@ -1,6 +1,7 @@
 class LoansController < ApplicationController
   before_action :authenticate_user!
   before_action :set_loan, only: [:show, :confirm, :accept_adjustment, :reject_adjustment, :request_readjustment, :repay]
+  before_action :check_kyc_status, only: [:new, :create]
 
   def new
     @loan = Loan.new
@@ -91,6 +92,12 @@ class LoansController < ApplicationController
 
   def set_loan
     @loan = current_user.loans.find(params[:id])
+  end
+
+  def check_kyc_status
+    if current_user.kyc_profile.nil? || %w[pending rejected].include?(current_user.kyc_profile.status)
+      redirect_to user_dashboard_path, notice: "Your KYC is not approved yet."
+    end
   end
 
   def loan_params

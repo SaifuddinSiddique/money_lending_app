@@ -1,0 +1,2 @@
+module Admin::KycProfilesHelper
+end

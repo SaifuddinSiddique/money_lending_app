@@ -2,7 +2,9 @@
   <h1 class="mb-4">Admin Dashboard - Loan Requests</h1>
 
   <div class="alert alert-primary" role="alert">
-    <strong>Wallet Balance:</strong> ₹<%= @wallet_balance %>
+    <strong>Wallet Balance:</strong> ₹<%= @wallet_balance %><br>
+    <%= link_to "KYC Requests", admin_kyc_profiles_path %>
+
   </div>
 
   <% if @loans.any? %>

@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   has_many :loans
   has_many :wallet_transactions, foreign_key: :wallet_id
+  has_one :kyc_profile, dependent: :destroy
+  accepts_nested_attributes_for :kyc_profile
 
   after_create :initialize_wallet_balance
 

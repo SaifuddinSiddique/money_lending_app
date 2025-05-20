@@ -1,0 +1,33 @@
+<h1>Pending KYC Requests</h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Full Name</th>
+      <th>DOB</th>
+      <th>Phone</th>
+      <th>Documents</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @kyc_profiles.each do |kyc| %>
+      <tr>
+        <td><%= kyc.user.email %></td>
+        <td><%= kyc.full_name %></td>
+        <td><%= kyc.dob %></td>
+        <td><%= kyc.phone %></td>
+        <td>
+          <%= link_to "ID Document", url_for(kyc.id_document), target: "_blank" if kyc.id_document.attached? %><br>
+          <%= link_to "Selfie", url_for(kyc.selfie), target: "_blank" if kyc.selfie.attached? %><br>
+          <%= link_to "Address Proof", url_for(kyc.address_proof), target: "_blank" if kyc.address_proof.attached? %>
+        </td>
+        <td>
+          <%= link_to "Approve", approve_admin_kyc_profile_path(kyc), data: { turbo_method: :patch}, class: "btn btn-success btn-sm" %>
+          <%= link_to "Reject", reject_admin_kyc_profile_path(kyc), data: { turbo_method: :patch}, class: "btn btn-danger btn-sm" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

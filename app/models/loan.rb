@@ -43,7 +43,7 @@ class Loan < ApplicationRecord
   end
 
   def process_wallet_transaction
-    return unless approved? || state == "open"
+    return unless approved? || state == "open" || state == "waiting_for_adjustment_acceptance"
 
     admin = User.find_by(id: self.admin_id)
 
@@ -54,7 +54,7 @@ class Loan < ApplicationRecord
 
     admin_wallet = admin.wallet_balance - amount
     user_wallet = user.wallet_balance + amount
-    debugger
+
     ActiveRecord::Base.transaction do
       admin.update!(wallet_balance: admin_wallet)
       user.update!(wallet_balance: user_wallet)
@@ -87,7 +87,7 @@ class Loan < ApplicationRecord
 
     user_wallet = user.wallet_balance - repayment_amount
     admin_wallet = admin.wallet_balance + repayment_amount
-    debugger
+
     ActiveRecord::Base.transaction do
       admin.update!(wallet_balance: admin_wallet)
       user.update!(wallet_balance: user_wallet)

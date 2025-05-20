@@ -1,0 +1,66 @@
+<%= form_with(model: [current_user, @kyc_profile], html: { class: "needs-validation", enctype: "multipart/form-data" }, local: true) do |form| %>
+    <div class="container mt-4">
+      <div class="row mb-3">
+        <div class="col">
+          <%= form.label :full_name, class: "form-label" %>
+          <%= form.text_field :full_name, class: "form-control", required: true %>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col">
+          <%= form.label :dob, class: "form-label" %>
+          <%= form.date_select :dob, { start_year: 1900, end_year: Date.today.year }, { class: "form-select" } %>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col">
+          <%= form.label :phone, class: "form-label" %>
+          <%= form.telephone_field :phone, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col">
+          <%= form.label :address, class: "form-label" %>
+          <%= form.text_area :address, rows: 3, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col">
+          <%= form.label :nationality, class: "form-label" %>
+          <%= form.text_field :nationality, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col">
+          <%= form.label :id_document, "ID Document", class: "form-label" %>
+          <%= form.file_field :id_document, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col">
+          <%= form.label :selfie, class: "form-label" %>
+          <%= form.file_field :selfie, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="row mb-4">
+        <div class="col">
+          <%= form.label :address_proof, "Address Proof", class: "form-label" %>
+          <%= form.file_field :address_proof, class: "form-control" %>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <%= form.submit "Submit KYC", class: "btn btn-primary w-100" %>
+        </div>
+      </div>
+    </div>
+<% end %>
+  

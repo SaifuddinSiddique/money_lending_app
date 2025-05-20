@@ -9,4 +9,10 @@ class ApplicationController < ActionController::Base
       user_dashboard_path
     end
   end
+
+  def authenticate_admin!
+    unless current_user&.role == 'admin'
+      redirect_to root_path, alert: "Access denied."
+    end
+  end
 end
