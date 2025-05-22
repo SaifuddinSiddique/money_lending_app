@@ -10,7 +10,7 @@ class WalletTransaction < ApplicationRecord
       adjustment: "adjustment",
       fee: "fee"
     }
-  
+
     validates :transaction_type, presence: true
     validates :amount, numericality: { greater_than: 0 }
 end

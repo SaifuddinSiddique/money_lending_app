@@ -8,5 +8,4 @@ class KycProfile < ApplicationRecord
   enum status: { pending: "pending", approved: "approved", rejected: "rejected" }
 
   validates :full_name, :dob, :phone, :address, :nationality, presence: true
-
 end

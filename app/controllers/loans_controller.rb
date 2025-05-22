@@ -1,7 +1,7 @@
 class LoansController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_loan, only: [:show, :confirm, :accept_adjustment, :reject_adjustment, :request_readjustment, :repay]
-  before_action :check_kyc_status, only: [:new, :create]
+  before_action :set_loan, only: [ :show, :confirm, :accept_adjustment, :reject_adjustment, :request_readjustment, :repay ]
+  before_action :check_kyc_status, only: [ :new, :create ]
 
   def new
     @loan = Loan.new
@@ -9,10 +9,10 @@ class LoansController < ApplicationController
 
   def create
     @loan = current_user.loans.new(loan_params)
-    @loan.state = 'requested'
+    @loan.state = "requested"
 
     if @loan.save
-      redirect_to @loan, notice: 'Loan request submitted successfully!'
+      redirect_to @loan, notice: "Loan request submitted successfully!"
     else
       render :new
     end
@@ -25,30 +25,30 @@ class LoansController < ApplicationController
   def accept_adjustment
     if @loan.waiting_for_adjustment_acceptance? || @loan.waiting_for_readjustment_acceptance?
       @loan.process_wallet_transaction
-      @loan.update(state: 'open', total_amount: @loan.amount)
-      redirect_to @loan, notice: 'Loan opened successfully after adjustment!'
+      @loan.update(state: "open", total_amount: @loan.amount)
+      redirect_to @loan, notice: "Loan opened successfully after adjustment!"
     else
-      redirect_to @loan, alert: 'Invalid loan state for acceptance.'
+      redirect_to @loan, alert: "Invalid loan state for acceptance."
     end
   end
 
   # User rejects the loan approval or adjustment
   def reject_adjustment
     if @loan.requested? || @loan.waiting_for_adjustment_acceptance? || @loan.waiting_for_readjustment_acceptance?
-      @loan.update(state: 'rejected')
-      redirect_to @loan, notice: 'Loan request rejected!'
+      @loan.update(state: "rejected")
+      redirect_to @loan, notice: "Loan request rejected!"
     else
-      redirect_to @loan, alert: 'Invalid loan state for rejection.'
+      redirect_to @loan, alert: "Invalid loan state for rejection."
     end
   end
 
   # User requests another adjustment (readjustment)
   def request_readjustment
     if @loan.waiting_for_adjustment_acceptance?
-      @loan.update(state: 'readjustment_requested')
-      redirect_to @loan, notice: 'Readjustment requested!'
+      @loan.update(state: "readjustment_requested")
+      redirect_to @loan, notice: "Readjustment requested!"
     else
-      redirect_to @loan, alert: 'Cannot request readjustment at this stage.'
+      redirect_to @loan, alert: "Cannot request readjustment at this stage."
     end
   end
 
@@ -57,15 +57,15 @@ class LoansController < ApplicationController
     if @loan.open?
       @loan.process_closed_loan_transaction
       @loan.update(state: "closed")
-      redirect_to @loan, notice: 'Loan repaid and closed!'
+      redirect_to @loan, notice: "Loan repaid and closed!"
     else
-      redirect_to @loan, alert: 'Loan cannot be repaid right now.'
+      redirect_to @loan, alert: "Loan cannot be repaid right now."
     end
   end
 
   def confirm_approval
     @loan = Loan.find(params[:id])
-  
+
     if @loan.user == current_user && @loan.approved?
       # Update the loan state to 'open' and process wallet transaction
       if @loan.process_wallet_transaction
@@ -77,7 +77,7 @@ class LoansController < ApplicationController
     else
       redirect_to user_dashboard_path, alert: "Loan not found or already processed."
     end
-  end  
+  end
 
   def reject_approval
     @loan = Loan.find(params[:id])

@@ -2,14 +2,14 @@ Rails.application.routes.draw do
   devise_for :users
 
   get "user_dashboard", to: "users#dashboard"
-  get 'wallet_transactions/wallet_history', to: 'wallet_transactions#wallet_history'
+  get "wallet_transactions/wallet_history", to: "wallet_transactions#wallet_history"
 
   resources :users do
     resources :kyc_profiles
   end
 
   namespace :admin do
-    resources :kyc_profiles, only: [:index] do
+    resources :kyc_profiles, only: [ :index ] do
       member do
         patch :approve
         patch :reject

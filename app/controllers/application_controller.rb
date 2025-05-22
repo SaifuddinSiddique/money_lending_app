@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_admin!
-    unless current_user&.role == 'admin'
+    unless current_user&.role == "admin"
       redirect_to root_path, alert: "Access denied."
     end
   end
