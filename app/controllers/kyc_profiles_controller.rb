@@ -2,7 +2,6 @@ class KycProfilesController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    debugger
     @kyc_profile = current_user.build_kyc_profile
   end
 

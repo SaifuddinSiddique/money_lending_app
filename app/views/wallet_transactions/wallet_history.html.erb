@@ -27,5 +27,7 @@
     </tbody>
   </table>
   <%= link_to "Back to Dashboard", user_dashboard_path %>
-  <%= will_paginate @transactions %>
+  <div class="digg_pagination">
+    <%= will_paginate @transactions %>
+  </div>
 </div>

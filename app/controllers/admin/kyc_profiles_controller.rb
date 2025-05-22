@@ -3,7 +3,7 @@ class Admin::KycProfilesController < ApplicationController
   
   def index
     # List only pending KYC requests
-    @kyc_profiles = KycProfile.where(status: :pending).includes(:user)
+    @kyc_profiles = KycProfile.where(status: :pending).includes(:user).paginate(page: params[:page], per_page: 10)
   end
 
   def approve

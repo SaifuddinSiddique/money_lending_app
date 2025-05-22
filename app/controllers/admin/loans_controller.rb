@@ -3,7 +3,7 @@ class Admin::LoansController < ApplicationController
   before_action :admin_only
 
   def index
-    @loans = Loan.requested.or(Loan.readjustment_requested)
+    @loans = Loan.requested.or(Loan.readjustment_requested).paginate(page: params[:page], per_page: 10)
     @wallet_balance = current_user.wallet_balance
   end
 

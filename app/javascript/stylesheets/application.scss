@@ -166,6 +166,7 @@ button[type="submit"]:hover {
     height: 100%;
     border-radius: 50%;
     background: red;
+    padding-top: 70px;
     left: 50%;
     top: 126%;
     background: hsl(var(--fgColorH), var(--fgColorS), var(--fgColorL));
@@ -215,3 +216,75 @@ button[type="submit"]:hover {
   .loan-actions form.button_to input[type="submit"]:hover {
     background-color: #0056b3;
   }
+
+.digg_pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1rem;
+  background: white;
+}
+
+.digg_pagination a,
+.digg_pagination span,
+.digg_pagination em {
+  padding: 0.4em 0.75em;
+  font-size: 0.875rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.digg_pagination a:hover,
+.digg_pagination a:focus {
+  color: #0056b3;
+  border-color: #0056b3;
+  background-color: #f1f1f1;
+}
+
+.digg_pagination .current {
+  font-weight: bold;
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  pointer-events: none;
+}
+
+.digg_pagination .disabled {
+  color: #999;
+  border: 1px solid #ddd;
+  pointer-events: none;
+}
+
+.digg_pagination .page_info {
+  background: #007bff;
+  color: white;
+  padding: 0.4em 0.6em;
+  text-align: center;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5em;
+  width: 100%;
+}
+
+.digg_pagination .page_info b {
+  color: #000;
+  background: #cce5ff;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2rem;
+}
+
+/* Remove legacy float/clearfix hacks */
+.digg_pagination:after,
+.digg_pagination::after {
+  content: none;
+}
+.shift-left {
+  position: relative;
+  right: 14vw;
+}
+.shift-right {
+  position: relative;
+  left: 14vw;
+}

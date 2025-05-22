@@ -31,3 +31,7 @@
     <% end %>
   </tbody>
 </table>
+<div class="digg_pagination">
+  <%= will_paginate @kyc_profiles %>
+</div>
+<%= link_to 'Back to loans', admin_loans_path %>

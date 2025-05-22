@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   def dashboard
     @wallet_balance = current_user.wallet_balance
-    @loans = current_user.loans.order(created_at: :desc)
+    @loans = current_user.loans.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
   private

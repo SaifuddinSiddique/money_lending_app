@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Lending App" %></title>
+    <title><%= content_for(:title) || "Money Lending App" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -18,8 +18,73 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
+    <!-- Fixed Navbar Start -->
+    <% if user_signed_in? %>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <%= link_to "Lending App", root_path, class: "navbar-brand shift-left" %>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <%#= link_to "Dashboard", user_dashboard_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%#= link_to "Loans", loans_path, class: "nav-link" %>
+              </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <%= link_to "Log Out", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure you want Log Out" }, class: "btn btn-outline-danger shift-right" %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <% end %>
+    <!-- Fixed Navbar End -->
+
+    <!-- Flash Notice -->
     <p class="alert"><%= alert %></p>
-    <%= yield %>
+    <% if flash[:notice] %>
+      <div id="flash-notice">
+        <%= flash[:notice] %>
+      </div>
+
+      <style>
+        #flash-notice {
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: #007bff;
+          color: white;
+          padding: 10px 20px;
+          border-radius: 6px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          font-size: 14px;
+          z-index: 1050; /* higher than navbar */
+          max-width: 90%;
+          text-align: center;
+        }
+      </style>
+
+      <script>
+        setTimeout(function () {
+          const notice = document.getElementById('flash-notice')
+          if (notice) notice.style.display = 'none'
+        }, 3000); // auto-hide after 3 seconds
+      </script>
+    <% end %>
+
+    <!-- Page Content with top padding so it’s not hidden under navbar -->
+    <div class="container pt-5 mt-4">
+      <%= yield %>
+    </div>
   </body>
 </html>
