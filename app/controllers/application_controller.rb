@@ -22,13 +22,13 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     # For sign up
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :name ])
 
     # For account update (optional, if users can update their name)
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :name ])
 
     # For sign in, Devise typically uses only email and password, adding :name is unusual
     # But if you really want to permit it:
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:name])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [ :name ])
   end
 end
