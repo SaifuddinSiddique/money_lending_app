@@ -32,7 +32,8 @@ h2 {
 }
 
 .input input[type="email"],
-.input input[type="password"] {
+.input input[type="password"],
+.input input[type="name"] {
   width: 82%;
   padding: 0.75rem 1rem;
   border: 1px solid #ddd;
@@ -42,7 +43,8 @@ h2 {
 }
 
 .input input[type="email"]:focus,
-.input input[type="password"]:focus {
+.input input[type="password"]:focus,
+.input input[type="name"]:focus{
   border-color: #4f46e5;
   outline: none;
 }
