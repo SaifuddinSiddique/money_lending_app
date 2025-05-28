@@ -1,6 +1,6 @@
 class LoansController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_loan, only: [ :show, :confirm, :accept_adjustment, :reject_adjustment, :request_readjustment, :repay ]
+  before_action :set_loan, only: [:show, :confirm_approval, :reject_approval, :accept_adjustment, :reject_adjustment, :request_readjustment, :repay]
   before_action :check_kyc_status, only: [ :new, :create ]
 
   def new
@@ -23,71 +23,35 @@ class LoansController < ApplicationController
   end
 
   def accept_adjustment
-    if @loan.waiting_for_adjustment_acceptance? || @loan.waiting_for_readjustment_acceptance?
-      @loan.process_wallet_transaction
-      @loan.update(state: "open", total_amount: @loan.amount)
-      redirect_to @loan, notice: "Loan opened successfully after adjustment!"
-    else
-      redirect_to @loan, alert: "Invalid loan state for acceptance."
-    end
+    result = LoanAdjustmentService.new(@loan, current_user).accept_adjustment
+    redirect_to @loan, notice: result[:notice], alert: result[:alert]
   end
 
-  # User rejects the loan approval or adjustment
   def reject_adjustment
-    if @loan.requested? || @loan.waiting_for_adjustment_acceptance? || @loan.waiting_for_readjustment_acceptance?
-      @loan.update(state: "rejected")
-      redirect_to @loan, notice: "Loan request rejected!"
-    else
-      redirect_to @loan, alert: "Invalid loan state for rejection."
-    end
+    result = LoanAdjustmentService.new(@loan, current_user).reject_adjustment
+    redirect_to @loan, notice: result[:notice], alert: result[:alert]
   end
 
-  # User requests another adjustment (readjustment)
   def request_readjustment
-    if @loan.waiting_for_adjustment_acceptance?
-      @loan.update(state: "readjustment_requested")
-      redirect_to @loan, notice: "Readjustment requested!"
-    else
-      redirect_to @loan, alert: "Cannot request readjustment at this stage."
-    end
+    result = LoanAdjustmentService.new(@loan, current_user).request_readjustment
+    redirect_to @loan, notice: result[:notice], alert: result[:alert]
   end
 
-  # User repays loan
   def repay
-    if @loan.open?
-      @loan.process_closed_loan_transaction
-      @loan.update(state: "closed")
-      redirect_to @loan, notice: "Loan repaid and closed!"
-    else
-      redirect_to @loan, alert: "Loan cannot be repaid right now."
-    end
+    result = LoanRepaymentService.new(@loan, current_user).repay
+    redirect_to @loan, notice: result[:notice], alert: result[:alert]
   end
 
   def confirm_approval
-    @loan = Loan.find(params[:id])
-
-    if @loan.user == current_user && @loan.approved?
-      # Update the loan state to 'open' and process wallet transaction
-      if @loan.process_wallet_transaction
-        @loan.update(state: :open, total_amount: @loan.amount)  # Update the state of the loan to 'open'
-        redirect_to user_dashboard_path, notice: "Loan confirmed. It is now open!"
-      else
-        redirect_to user_dashboard_path, alert: "Admin does not have enough balance to approve the loan."
-      end
-    else
-      redirect_to user_dashboard_path, alert: "Loan not found or already processed."
-    end
+    result = LoanApprovalService.new(@loan, current_user).confirm_approval
+    redirect_to user_dashboard_path, notice: result[:notice], alert: result[:alert]
   end
 
   def reject_approval
-    @loan = Loan.find(params[:id])
-    if @loan.user == current_user && @loan.approved?
-      @loan.update(state: :rejected)
-      redirect_to user_dashboard_path, notice: "Loan rejected."
-    else
-      redirect_to user_dashboard_path, alert: "Loan not found or already processed."
-    end
+    result = LoanApprovalService.new(@loan, current_user).reject_approval
+    redirect_to user_dashboard_path, notice: result[:notice], alert: result[:alert]
   end
+
   private
 
   def set_loan
