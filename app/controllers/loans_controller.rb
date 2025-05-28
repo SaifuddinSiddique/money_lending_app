@@ -1,6 +1,6 @@
 class LoansController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_loan, only: [:show, :confirm_approval, :reject_approval, :accept_adjustment, :reject_adjustment, :request_readjustment, :repay]
+  before_action :set_loan, only: [ :show, :confirm_approval, :reject_approval, :accept_adjustment, :reject_adjustment, :request_readjustment, :repay ]
   before_action :check_kyc_status, only: [ :new, :create ]
 
   def new

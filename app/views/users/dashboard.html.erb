@@ -55,6 +55,10 @@
                 <p class="mb-2"><strong>Loan opened on: </strong><%= loan.opened_at&.strftime("%d %B %Y") %></p>
               <% end %>
 
+              <% if loan.rejected? %>
+                <strong>Rejected:</strong> Your loan is rejected by the admin.
+              <% end %>
+
               <%= link_to "View Details", loan_path(loan), class: "btn btn-outline-primary btn-sm mb-3" %>
 
               <% if loan.state.in?(%w[waiting_for_adjustment_acceptance waiting_for_readjustment_acceptance]) %>
