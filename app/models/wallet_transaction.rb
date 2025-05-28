@@ -1,5 +1,5 @@
 class WalletTransaction < ApplicationRecord
-    belongs_to :wallet, class_name: "User"
+    belongs_to :user
     belongs_to :related_user, class_name: "User", optional: true
     belongs_to :loan, optional: true
 

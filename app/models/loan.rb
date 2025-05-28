@@ -60,7 +60,7 @@ class Loan < ApplicationRecord
       user.update!(wallet_balance: user_wallet)
 
       WalletTransaction.create!(
-        wallet: user,
+        user: user,
         transaction_type: :credit,
         amount: amount,
         description: "Loan payment for loan ##{self.id}",
@@ -93,7 +93,7 @@ class Loan < ApplicationRecord
       user.update!(wallet_balance: user_wallet)
 
       WalletTransaction.create!(
-        wallet: user,
+        user: user,
         transaction_type: :debit,
         amount: amount,
         description: "Loan repayment for loan ##{self.id}",

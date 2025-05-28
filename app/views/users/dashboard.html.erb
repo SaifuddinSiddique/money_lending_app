@@ -52,6 +52,7 @@
 
               <% if loan.open? %>
                 <p class="mb-2"><strong>Total Payable:</strong> <%= number_to_currency(loan.total_amount, precision: 2, unit: "₹") %></p>
+                <p class="mb-2"><strong>Loan opened on: </strong><%= loan.opened_at&.strftime("%d %B %Y") %></p>
               <% end %>
 
               <%= link_to "View Details", loan_path(loan), class: "btn btn-outline-primary btn-sm mb-3" %>

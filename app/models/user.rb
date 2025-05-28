@@ -4,8 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :loans
-  has_many :wallet_transactions, foreign_key: :wallet_id
+  has_many :loans, dependent: :destroy
+  has_many :wallet_transactions, dependent: :destroy
   has_one :kyc_profile, dependent: :destroy
   accepts_nested_attributes_for :kyc_profile
 

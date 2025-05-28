@@ -20,7 +20,7 @@
             <%= number_to_currency(t.amount, unit: "₹") %>
           </td>
           <td><%= t.description %></td>
-          <td><%= t.related_user&.email || "-" %></td>
+          <td><%= t.related_user&.name || "-" %></td>
           <td><%= link_to "View Details", loan_path(t.loan)%></td>
         </tr>
       <% end %>

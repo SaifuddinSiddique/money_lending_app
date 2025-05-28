@@ -26,7 +26,7 @@
         <div class="col-md-6 col-lg-4">
           <div class="card h-100 border-0 shadow-sm">
             <div class="card-body">
-              <h6 class="card-title mb-2 text-primary"><%= loan.user.email %></h6>
+              <h6 class="card-title mb-2 text-primary"><%= loan.user.name %></h6>
               <p class="mb-1"><strong>Amount:</strong> ₹<%= loan.amount %></p>
               <p class="mb-1"><strong>Interest Rate:</strong> <%= loan.interest_rate %>%</p>
               <p class="mb-2"><strong>Status:</strong> <span class="badge bg-secondary"><%= loan.state.humanize %></span></p>
