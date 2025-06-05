@@ -10,7 +10,6 @@ class LoansController < ApplicationController
   def create
     @loan = current_user.loans.new(loan_params)
     @loan.state = "requested"
-
     if @loan.save
       redirect_to @loan, notice: "Loan request submitted successfully!"
     else

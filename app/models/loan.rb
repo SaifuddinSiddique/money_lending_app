@@ -101,7 +101,6 @@ class Loan < ApplicationRecord
         loan: self
       )
     end
-
     true
   end
 end

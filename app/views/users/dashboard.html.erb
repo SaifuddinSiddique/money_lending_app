@@ -1,5 +1,5 @@
-<div class="container-fluid bg-light py-3">
-  <h2 class="fw-bold mb-0">Welcome, <%= current_user.name || "User" %></h2>
+<div class="container-fluid bg-dark py-3">
+  <h2 class="fw-bold mb-0 text-light">Welcome, <%= current_user.name || "User" %></h2>
 </div>
 
 <div class="container my-5">
@@ -39,7 +39,13 @@
   </div>
 
   <!-- Loans Section -->
-  <h4 class="mb-3 fw-semibold">Your Loans</h4>
+  <div class="d-flex justify-content-between align-items-center mb-2" style="margin-top: -0.25rem;">
+    <h4 class="fw-semibold mb-0">Your Loans</h4>
+    <%#= form_tag(user_dashboard_path, method: :get, class: "d-flex", role: "search") do %>
+      <%#= text_field_tag(:q, params[:q], class: "form-control form-control-sm me-2", placeholder: "Search loans...", style: "max-width: 200px; height: 32px;") %>
+      <%#= submit_tag("Search", class: "btn btn-sm btn-outline-primary") %>
+    <%# end %>
+  </div>
   <% if @loans.any? %>
     <div class="row g-4">
       <% @loans.each do |loan| %>

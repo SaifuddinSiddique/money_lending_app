@@ -8,7 +8,6 @@ class KycProfilesController < ApplicationController
   def create
     @kyc_profile = current_user.build_kyc_profile(kyc_profile_params)
     if @kyc_profile.save
-      @kyc.update(status: "pending")
       redirect_to root_path, notice: "KYC submitted successfully."
     else
       render :new
