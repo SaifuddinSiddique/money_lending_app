@@ -61,5 +61,5 @@ gem "whenever", require: false
 gem "bootstrap", "~> 5.3"
 gem "sassc-rails"
 gem "jsbundling-rails", "~> 1.3"
-gem "will_paginate", "~> 3.3"
+gem "will_paginate", "~> 4.0"
 gem "foreman"
